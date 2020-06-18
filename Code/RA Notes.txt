@@ -1,0 +1,52 @@
+Data Storage
+
+1) Folders should be structured like so:
+Data
+	Raw
+	Cleaned
+Code
+	Clean_dataset1.R
+	Clean_dataset2.R
+	Analysis_descriptives.R
+
+The key reason we separate out Raw and Cleaned data folders is because you should NEVER save over raw data. Don't edit it, don't touch it. Save everything in the Cleaned folder.
+
+2) The data folders live on dropbox
+The code folders live on your local computer and are synced via Git (git kraken)
+
+
+Coding tips and tricks
+
+If in doubt, refer to R for Data Science by Hadley Wickham. In particular
+	1) Use Hadley Wickham's functions (read_delim, read_csv) to infile data; they're a lot faster than alternatives.
+	2) Use <- to assign values and == to assess values
+	3) Use pipes %>% to make coding clearer
+
+Details specific to me
+	1) If you're unsure about something or must return to it later, mark it with //!\\
+	2) use R Studio's sections: #### Section 1 #### to make code easier to skip through
+	3) before each chunk, include a comment explaining what you're trying to do
+	4) the Prep_for_images.R file includes a lot of packages and specs to make figures the way I want them. Remember to use + g15c_style in your figures.
+	5) Feel free to comment things out rather than delete things while you're arriving at the just-right code. This will save you from having to remember what precisely you did before.
+	6) Especially if you're dealing with big data, make a habit of cleaning up after yourself. Use rm() to delete bigger intermediate files when they're no longer helpful. Likewise when you have intermediate variables you no longer need, drop those so your dataset doesn't become huge.
+
+Data cleaning tips
+	0) Never, ever over-write the original, raw data. Save a new version when you touch anything!
+	1) Make a sample restriction table that has a row for each restriction, names the restriction, and has values for how many observations were there before and how many observations were there afterward.
+	2) View the data often
+	3) In order to make it easy to run the file, put View statements inside an if statement:
+		if(debug == T){
+			data %>% filter(group_of_interest == T) %>% View()
+		}
+	4) Plot histograms and time-series of values as you're cleaning to make sure they make sense (see sample figures)
+	5) Always check for missing and top-coded values. Think carefully about how they should be treated, make notes of it and discuss with me. Maybe try out two different treatments and see how that changes things.
+	6) For variable definitions that include a lot of if-elses, use the case_when function for readability
+	7) Don't drop observations without being very very clear that we want to drop them. Again, make a note of this, talk with me, and maybe try out not dropping them and see how that changes things.
+
+Analysis tips
+	1) Use felm() to run regressions. Here is a link on how to write the formula: https://rdrr.io/cran/lfe/man/felm.html. But roughly it is 
+	reg <- felm(y ~ x + controls | fixed effects | (z ~ instrument)) | cluster variable)
+	2) Use stargazer to make basic regression tables to ensure the lineup of regression you're using make sense (see sample code below)
+	3) If you plan to make figures of the coefficients from your regressions, use a loop and store the relevant outcomes (see sample regression loop)
+
+
